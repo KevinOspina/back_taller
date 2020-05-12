@@ -29,3 +29,9 @@ class PrincipleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Principle
         fields = ('principle', 'grade', 'justification')
+
+
+class ComponentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Component
+        fields = '__all__'

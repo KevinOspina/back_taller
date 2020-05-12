@@ -34,81 +34,28 @@ class Principle(models.Model):
         unique_together = ("assessment", "principle")
 
     def __str__(self):
-        return '{} {}'.format(self.principle, self.justification)
+        return '{}: {}'.format(self.principle, self.justification)
+
+
+class Component(models.Model):
+    description = models.TextField()
+    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE, related_name='components')
+    component_type = models.CharField(max_length=20, choices=EVIDENCE_CHOICES)
+
+    def __str__(self):
+        return '{}: {}'.format(self.component_type, self.description)
+
+    class Meta:
+        verbose_name = "Component"
+        verbose_name_plural = "Componentes"
 
 
 class Evidence(models.Model):
     """
     Represents all the evidence of a principle on an strategy
     """
-    sort_of = models.CharField(max_length=30, null=False, choices=EVIDENCE_CHOICES)
-    description = models.CharField(null=False, max_length=150)
     principle = models.ForeignKey(Principle, on_delete=models.PROTECT, related_name='evidences')
+    component = models.ForeignKey(Component, on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.description
-
-
-class Rule(models.Model):
-    description = models.CharField(max_length=100)
-    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE, related_name='rules')
-    evidence_of = models.OneToOneField(Evidence, on_delete=models.SET_NULL, null=True)
-
-    def __str__(self):
-        return self.description
-
-    class Meta:
-        verbose_name = "Regla"
-        verbose_name_plural = "Reglas"
-
-
-class Material(models.Model):
-    description = models.CharField(max_length=100)
-    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE, related_name='materials')
-    evidence_of = models.OneToOneField(Evidence, on_delete=models.SET_NULL, null=True)
-
-    def __str__(self):
-        return self.description
-
-    class Meta:
-        verbose_name = "Material"
-        verbose_name_plural = "Materiales"
-
-
-class Goal(models.Model):
-    description = models.CharField(max_length=100)
-    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE, related_name='goals')
-    evidence_of = models.OneToOneField(Evidence, on_delete=models.SET_NULL, null=True)
-
-    def __str__(self):
-        return self.description
-
-    class Meta:
-        verbose_name = "Objetivo"
-        verbose_name_plural = "Objetivos"
-
-
-class Role(models.Model):
-    description = models.CharField(max_length=100)
-    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE, related_name='roles')
-    evidence_of = models.OneToOneField(Evidence, on_delete=models.SET_NULL, null=True)
-
-    def __str__(self):
-        return self.description
-
-    class Meta:
-        verbose_name = "Rol"
-        verbose_name_plural = "Roles"
-
-
-class Step(models.Model):
-    description = models.CharField(max_length=100)
-    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE, related_name='steps')
-    evidence_of = models.OneToOneField(Evidence, on_delete=models.SET_NULL, null=True)
-
-    def __str__(self):
-        return self.description
-
-    class Meta:
-        verbose_name = "Paso"
-        verbose_name_plural = "Pasos"
+        return '{}: {}'.format(self.principle.principle, self.component.description)
