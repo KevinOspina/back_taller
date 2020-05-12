@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'meejel_back.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'marteoma',
+        'NAME': 'meejel',
         'USER': 'marteoma',
         'PASSWORD': 'marteoma',
         'HOST': 'localhost',
@@ -91,6 +91,9 @@ DATABASES = {
 }
 
 REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': (
+        'meejel.permissions.Allow',
+    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
