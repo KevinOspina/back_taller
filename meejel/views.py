@@ -39,3 +39,22 @@ class PrincipleViewSet(viewsets.ModelViewSet):
         assessment_id = self.kwargs['assessment_pk']
         queryset = Principle.objects.filter(assessment_id=assessment_id)
         return queryset
+
+
+class ComponentViewSet(viewsets.ModelViewSet):
+    serializer_class = ComponentSerializer
+
+    def get_queryset(self):
+        assessment_id = self.kwargs['assessment_pk']
+        queryset = Component.objects.filter(assessment_id=assessment_id)
+        return queryset
+
+
+class EvidenceViewSet(viewsets.ModelViewSet):
+    serializer_class = EvidenceSerializer
+
+    def get_queryset(self):
+        print(self.kwargs)
+        principle_id = self.kwargs['principle_pk']
+        queryset = Evidence.objects.filter(principle_id=principle_id)
+        return queryset

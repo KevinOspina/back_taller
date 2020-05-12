@@ -18,7 +18,6 @@ class PrincipleAdmin(admin.ModelAdmin):
     list_filter = ('principle', 'grade')
 
 
-<<<<<<< HEAD
 class ComponentAdmin(admin.ModelAdmin):
     model = Component
     list_display = ('assessment', 'description', 'component_type')
