@@ -18,5 +18,19 @@ class PrincipleAdmin(admin.ModelAdmin):
     list_filter = ('principle', 'grade')
 
 
+<<<<<<< HEAD
+class ComponentAdmin(admin.ModelAdmin):
+    model = Component
+    list_display = ('assessment', 'description', 'component_type')
+    list_filter = ('assessment', )
+
+
+class EvidenceAdmin(admin.ModelAdmin):
+    model = Evidence
+    list_display = ('principle', 'component')
+
+
 admin.site.register(Assessment, AssessmentAdmin)
 admin.site.register(Principle, PrincipleAdmin)
+admin.site.register(Component, ComponentAdmin)
+admin.site.register(Evidence, EvidenceAdmin)

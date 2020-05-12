@@ -113,3 +113,4 @@ class Step(models.Model):
 
     verbose_name = "Paso"
     verbose_name_plural = "Pasos"
+>>>>>>> master
