@@ -1,0 +1,1 @@
+web: gunicorn meejel_back.wsgi --log-file -
