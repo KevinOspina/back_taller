@@ -6,8 +6,8 @@ admin.site.index_title = 'MEEJEL'
 admin.site.site_title = 'Meejel Admin'
 
 
-class AssessmentAdmin(admin.ModelAdmin):
-    model = Assessment
+class InstrumentAdmin(admin.ModelAdmin):
+    model = Instrument
     list_display = ('name', 'owner')
     list_filter = ('name', 'owner')
 
@@ -18,11 +18,10 @@ class PrincipleAdmin(admin.ModelAdmin):
     list_filter = ('principle', 'grade')
 
 
-<<<<<<< HEAD
 class ComponentAdmin(admin.ModelAdmin):
     model = Component
-    list_display = ('assessment', 'description', 'component_type')
-    list_filter = ('assessment', )
+    list_display = ('instrument', 'description', 'component_type')
+    list_filter = ('instrument', )
 
 
 class EvidenceAdmin(admin.ModelAdmin):
@@ -30,7 +29,8 @@ class EvidenceAdmin(admin.ModelAdmin):
     list_display = ('principle', 'component')
 
 
-admin.site.register(Assessment, AssessmentAdmin)
+admin.site.register(Instrument, InstrumentAdmin)
 admin.site.register(Principle, PrincipleAdmin)
 admin.site.register(Component, ComponentAdmin)
 admin.site.register(Evidence, EvidenceAdmin)
+admin.site.register(Assessment)

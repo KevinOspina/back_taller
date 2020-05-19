@@ -33,5 +33,5 @@ EVIDENCE_CHOICES = (
     ("Materiales", "Materiales"),
     ("Pasos", "Pasos"),
     ("Reglas", "Reglas"),
-    ("Metas", "Metas"),
+    ("Objetivos", "Objetivos"),
 )

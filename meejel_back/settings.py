@@ -46,6 +46,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -82,9 +83,11 @@ WSGI_APPLICATION = 'meejel_back.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        # 'NAME': 'postgres',
         'NAME': 'meejel',
-        'USER': 'marteoma',
-        'PASSWORD': 'marteoma',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        # 'HOST': 'db',
         'HOST': 'localhost',
         'PORT': '5432'
     }
@@ -98,7 +101,7 @@ REST_FRAMEWORK = {
         'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.BasicAuthentication',
-    ),
+    )
 }
 
 JWT_AUTH = {
@@ -172,3 +175,8 @@ LOGGING = {
         },
     }
 }
+
+
+# Configure Django App for Heroku.
+import django_heroku
+django_heroku.settings(locals())

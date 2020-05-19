@@ -1,0 +1,20 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    container_name: db_service
+    environment:
+      POSTGRES_PASSWORD: marteoma
+      POSTGRES_USER: marteoma
+      POSTGRES_DB: postgres
+  web:
+    build: .
+    command: bash -c "python manage.py runserver 0.0.0.0:9000"
+    container_name: meejel_service
+    volumes:
+      - .:/meejel_service
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db
