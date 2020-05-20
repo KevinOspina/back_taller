@@ -1,20 +1,15 @@
 version: '3'
-
 services:
-  db:
+  postgres:
     image: postgres
-    container_name: db_service
-    environment:
-      POSTGRES_PASSWORD: marteoma
-      POSTGRES_USER: marteoma
-      POSTGRES_DB: postgres
-  web:
+    container_name: postgres_service
+    restart: always
+  django:
     build: .
-    command: bash -c "python manage.py runserver 0.0.0.0:9000"
-    container_name: meejel_service
-    volumes:
-      - .:/meejel_service
+    command: python manage.py runserver 0.0.0.0:9090
+    container_name: django_service
+    restart: always
     ports:
-      - "9000:9000"
+      - "9090:9090"
     depends_on:
-      - db
+      - postgres

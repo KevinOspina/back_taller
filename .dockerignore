@@ -1,0 +1,8 @@
+env
+venv
+ENV
+VENV
+**/__pycache__
+**/*.sqlite3
+**/*.log
+**/Procfile

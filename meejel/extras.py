@@ -15,6 +15,14 @@ GRADE_CHOICES = (
     ("Muy Alto", "Muy Alto")
 )
 
+GRADE_LEVEL = {
+    "Nulo": 1,
+    "Medio": 2,
+    "Significativo": 3,
+    "Alto": 4,
+    "Muy Alto": 5,
+}
+
 PRINCIPLE_CHOICES = (
     ("Orientación", "Orientación"),
     ("Elementos persuasivos", "Elementos persuasivos"),
