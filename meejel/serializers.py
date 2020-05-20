@@ -13,20 +13,20 @@ class UserSerializer(serializers.ModelSerializer):
 class GroupSerializers(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ('name', )
+        fields = ('name',)
 
 
 class InstrumentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Instrument
-        fields = ('id', 'name', 'owner')
+        fields = ('id', 'name', 'level')
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
-        # response['components'] = ComponentSerializer(instance.components, many=True).data
         response['owner'] = instance.owner.get_full_name()
-        response['Objetivos'] = GoalSerializer(Component.objects.filter(instrument=instance, component_type='Objetivos'),
-                                               many=True).data
+        response['Objetivos'] = GoalSerializer(
+            Component.objects.filter(instrument=instance, component_type='Objetivos'),
+            many=True).data
         response['Reglas'] = RuleSerializer(
             Component.objects.filter(instrument=instance, component_type='Reglas'),
             many=True).data
@@ -42,29 +42,10 @@ class InstrumentSerializer(serializers.ModelSerializer):
         return response
 
 
-class AssessmentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Assessment
-        fields = ('id', 'instrument', 'principles')
-
-    def to_representation(self, instance):
-        response = super().to_representation(instance)
-        response['owner'] = instance.instrument.owner.get_full_name()
-        response['instrument'] = instance.instrument.name
-        response['principles'] = PrincipleSerializer(instance.principles, many=True).data
-        return response
-
-
-class PrincipleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Principle
-        fields = ('id', 'principle', 'grade', 'justification')
-
-
 class GoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Component
-        fields = ('id', )
+        fields = ('id',)
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
@@ -75,7 +56,7 @@ class GoalSerializer(serializers.ModelSerializer):
 class RuleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Component
-        fields = ('id', )
+        fields = ('id',)
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
@@ -86,7 +67,7 @@ class RuleSerializer(serializers.ModelSerializer):
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Component
-        fields = ('id', )
+        fields = ('id',)
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
@@ -97,7 +78,7 @@ class RoleSerializer(serializers.ModelSerializer):
 class StepSerializer(serializers.ModelSerializer):
     class Meta:
         model = Component
-        fields = ('id', )
+        fields = ('id',)
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
@@ -108,7 +89,7 @@ class StepSerializer(serializers.ModelSerializer):
 class MaterialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Component
-        fields = ('id', )
+        fields = ('id',)
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
@@ -119,11 +100,32 @@ class MaterialSerializer(serializers.ModelSerializer):
 class EvidenceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Evidence
-        fields = ('id', 'principle', 'component')
+        fields = ('id', 'principle',)
 
     def to_representation(self, instance):
         response = super().to_representation(instance)
         principle = Principle.objects.get(pk=response['principle'])
-        component = Component.objects.get(pk=response['component'])
         response['principle'] = PrincipleSerializer(principle).data
         return response
+
+
+class ComponentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Component
+        fields = ('description', 'component_type')
+
+
+class EvidencePrincipleSerializer(serializers.ModelSerializer):
+    component = ComponentSerializer()
+
+    class Meta:
+        model = Evidence
+        fields = ('id', 'component')
+
+
+class PrincipleSerializer(serializers.ModelSerializer):
+    evidences = EvidencePrincipleSerializer(many=True)
+
+    class Meta:
+        model = Principle
+        fields = ('id', 'principle', 'grade', 'weight', 'evidences')

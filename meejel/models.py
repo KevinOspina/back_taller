@@ -1,12 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
-from .extras import GRADE_CHOICES, PRINCIPLE_CHOICES, EVIDENCE_CHOICES
+from .extras import GRADE_CHOICES, PRINCIPLE_CHOICES, EVIDENCE_CHOICES, GRADE_LEVEL
 
 
 class Instrument(models.Model):
     name = models.CharField(null=False, max_length=100, verbose_name='Nombre')
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, related_name='instruments',
                               verbose_name='Dueño', null=True)
+
+    def level(self):
+        total = 0
+        for i in self.principles.all():
+            total += i.weight
+        return total / 50
 
     def __str__(self):
         return self.name
@@ -18,38 +24,38 @@ class Instrument(models.Model):
         verbose_name_plural = 'Instrumentos'
 
 
-class Assessment(models.Model):
-    """
-    An assessment related to an specific user
-    """
-    instrument = models.OneToOneField(Instrument, on_delete=models.CASCADE, verbose_name='Instrumento')
-
-    def __str__(self):
-        return 'Assessment of: %s - %s' % (self.instrument.name, self.instrument.owner)
-
-    class Meta:
-        ordering = ['-id']
-        verbose_name = "Evaluación"
-        verbose_name_plural = "Evaluaciones"
-
-
 class Principle(models.Model):
     """
-    Principle composing an assessment
+    Principle composing an instrument
     """
     principle = models.CharField(max_length=30, null=False, choices=PRINCIPLE_CHOICES, verbose_name='Principio')
     grade = models.CharField(max_length=30, null=False, choices=GRADE_CHOICES, verbose_name='Nivel')
-    justification = models.CharField(max_length=150, null=False, verbose_name='Justificación')
-    assessment = models.ForeignKey(Assessment, on_delete=models.CASCADE, related_name='principles', verbose_name='Evaluación')
+    instrument = models.ForeignKey(Instrument, on_delete=models.CASCADE, related_name='principles', verbose_name='Instrumento')
+
+    @property
+    def weight(self):
+        x = Evidence.objects.filter(component__instrument=self.instrument, component__component_type='Objetivos').count()
+        n = Evidence.objects.filter(principle=self, component__component_type='Objetivos').count()
+        tlg = (40 * x) / n if n > 0 else 0
+        y = Evidence.objects.filter(component__instrument=self.instrument, component__component_type='Reglas').count()
+        m = Evidence.objects.filter(principle=self, component__component_type='Reglas').count()
+        tru = (30 * y) / m if m > 0 else 0
+        tro = Evidence.objects.filter(principle=self, component__component_type='Roles').count()
+        tma = Evidence.objects.filter(principle=self, component__component_type='Materiales').count()
+        tst = Evidence.objects.filter(principle=self, component__component_type='Pasos').count()
+        r = 10 if tro > 0 else 0
+        s = 5 if tst > 0 else 0
+        m = 5 if tma > 0 else 0
+        return (r + s + m + tru + tlg) * GRADE_LEVEL[self.grade]
 
     class Meta:
         ordering = ['-id']
         verbose_name = "Principio"
         verbose_name_plural = "Principios"
-        unique_together = ("assessment", "principle")
+        unique_together = ("instrument", "principle")
 
     def __str__(self):
-        return '{}: {}'.format(self.principle, self.justification)
+        return '{}: {}'.format(self.instrument.name, self.principle)
 
 
 class Component(models.Model):
