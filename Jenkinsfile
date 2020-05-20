@@ -10,7 +10,12 @@ pipeline {
         }
         stage('test') {
             steps {
-                sh 'python manage.py showmigrations'
+                sh 'ip a'
+            }
+        }
+        stage('run') {
+            steps {
+                sh 'python manage.py runserver 0.0.0.0:9090'
             }
         }
     }
