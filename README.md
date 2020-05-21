@@ -80,7 +80,7 @@ en la base de datos se cumpla.
 Este sistema fue hecho con propósitos educionales y gratis, si lo ve en un lugar comercial, por favor informenos.
 
 Este sistema fue hecho por:
-* Mateo Arboleda Roldán: marteoma@github.com
+* Kevin Sneider Ospina Cañaveral: kevinospina03@gmail.com
 * Cristhian Chica Acosta: cca00@github.com
 * Sebastián Mejía: mcMEJIA1@github.com
 
